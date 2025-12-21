@@ -1,0 +1,135 @@
+/* --- [Reset & Base] Start --- */
+:root {
+    /* Day Mode (Medical Identity) - Default */
+    --color-bg: #f8fafc;
+    /* Light Blue/Gray tint */
+    --color-bg-card: #ffffff;
+    --color-primary: #0f172a;
+    /* Navy Blue - Authority */
+    --color-secondary: #0ea5e9;
+    /* Sky Blue - Trust */
+    --color-accent: #38bdf8;
+    /* Lighter Blue */
+    --color-text: #334155;
+    /* Slate 700 */
+    --color-text-light: #64748b;
+    /* Slate 500 */
+    --color-border: #e2e8f0;
+
+    --shadow-card: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-hover: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+    --font-heading: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+[data-theme="dark"] {
+    /* Night Mode (Tech Identity) - Hacker/Dev Style */
+    --color-bg: #0d1117;
+    /* Deepest, almost black blue */
+    --color-bg-card: #161b22;
+    /* GitHub Dark Dimmed style */
+    --color-primary: #58a6ff;
+    /* GitHub Blue/Purple hint */
+    --color-secondary: #2ea043;
+    /* Terminal Green */
+    --color-accent: #bc8cff;
+    /* Creative Purple */
+    --color-text: #c9d1d9;
+    /* Light Gray */
+    --color-text-light: #8b949e;
+    /* Dimmed Gray */
+    --color-border: #30363d;
+
+    --shadow-card: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+    --shadow-hover: 0 0 0 2px var(--color-primary);
+    /* Glowing border effect instead of shadow */
+
+    --font-heading: 'JetBrains Mono', 'Fira Code', monospace;
+    /* Tech vibe */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-heading);
+    color: var(--color-primary);
+    line-height: 1.2;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.2s ease;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* --- [Reset & Base] End --- */
+
+/* --- [Utilities] Start --- */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--color-secondary);
+    color: #ffffff;
+    /* Always white text on filled button */
+    border-radius: 9999px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+    cursor: pointer;
+}
+
+.btn:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+}
+
+.btn-outline {
+    background-color: transparent;
+    border: 2px solid var(--color-secondary);
+    color: var(--color-secondary);
+}
+
+.btn-outline:hover {
+    background-color: var(--color-secondary);
+    color: #ffffff;
+}
+
+/* --- [Utilities] End --- */

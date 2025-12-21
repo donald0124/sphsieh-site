@@ -1,0 +1,171 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("posts")).sort(
+    (a, b) => b.data.publishedDate.valueOf() - a.data.publishedDate.valueOf(),
+);
+---
+
+<Layout title="Blog - Po Hsieh">
+    <!-- Inline Navigation used here to ensure links work from subpages, or update Main Layout to handle absolute paths -->
+    <nav
+        class="navbar"
+        style="position: relative; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.05);"
+    >
+        <div class="container nav-container">
+            <a href="/" class="nav-logo"
+                >Po Hsieh<span style="color:var(--color-secondary);">.</span></a
+            >
+            <div class="nav-links">
+                <a href="/#about" class="nav-link">關於我</a>
+                <a href="/#projects" class="nav-link">專案作品</a>
+                <a href="/blog" class="nav-link active">部落格</a>
+                <a href="/#contact" class="nav-btn">與我聯繫</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="section-block" style="padding-top: 60px;">
+        <div class="container">
+            <h1 class="section-title">Blog</h1>
+            <p
+                style="text-align: center; margin-bottom: 40px; color: var(--color-text-light);"
+            >
+                Sharing thoughts on Medicine, Technology, and everything in
+                between.
+            </p>
+            <div class="posts-grid">
+                {
+                    posts.length === 0 ? (
+                        <p style="text-align: center;">
+                            No posts yet. Visit{" "}
+                            <a href="/keystatic">/keystatic</a> to create one!
+                        </p>
+                    ) : (
+                        posts.map((post) => (
+                            <article class="post-card">
+                                <a
+                                    href={`/blog/${post.slug}`}
+                                    style="text-decoration: none; color: inherit;"
+                                >
+                                    <div class="post-content">
+                                        <h2 class="post-title">
+                                            {post.data.title}
+                                        </h2>
+                                        <time
+                                            datetime={post.data.publishedDate.toISOString()}
+                                            class="post-date"
+                                        >
+                                            {post.data.publishedDate.toLocaleDateString()}
+                                        </time>
+                                        <p class="post-desc">
+                                            {post.data.description}
+                                        </p>
+                                        <span class="read-more">
+                                            Read more →
+                                        </span>
+                                    </div>
+                                </a>
+                            </article>
+                        ))
+                    )
+                }
+            </div>
+        </div>
+    </section>
+</Layout>
+
+<style>
+    .posts-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .post-card {
+        background: var(--color-white);
+        border-radius: var(--radius-card);
+        padding: 2rem;
+        box-shadow: var(--shadow-card);
+        transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+        border: 1px solid #f1f5f9;
+        cursor: pointer;
+    }
+    .post-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    .post-title {
+        color: var(--color-primary);
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+    }
+    .post-date {
+        font-size: 0.875rem;
+        color: var(--color-text-light);
+        display: block;
+        margin-bottom: 1rem;
+    }
+    .post-desc {
+        color: var(--color-text);
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+    }
+    .read-more {
+        color: var(--color-secondary);
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+    /* Simple nav overrides for this page */
+    .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 70px;
+    }
+    .nav-logo {
+        font-size: 1.5rem;
+        font-weight: 900;
+        color: var(--color-primary);
+        text-decoration: none;
+    }
+    .nav-links {
+        display: flex;
+        gap: 24px;
+        align-items: center;
+    }
+    .nav-link {
+        color: var(--color-text);
+
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.95rem;
+        transition: color 0.3s;
+    }
+    .nav-link:hover,
+    .nav-link.active {
+        color: var(--color-secondary);
+    }
+    .nav-btn {
+        padding: 8px 20px;
+        background: var(--color-primary);
+        color: white;
+        border-radius: 20px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: background 0.3s;
+    }
+    .nav-btn:hover {
+        background: var(--color-highlight);
+    }
+    @media (max-width: 768px) {
+        .nav-links {
+            display: none; /* Simplification for mobile for now */
+        }
+    }
+</style>

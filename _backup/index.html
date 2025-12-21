@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. Hsieh - Medical Tech Solutions</title>
+    <style>
+        /* =========================================
+           CSS 樣式表
+           規範：
+           1. 手機優先 (Mobile First)
+           2. 禁用 ID 選擇器 (#)
+           3. 使用 System UI 字體
+           ========================================= */
+
+        :root {
+            /* 專業醫療配色：深藍、科技藍、強調黃 */
+            --color-primary: #0f172a;
+            /* 深邃藍 */
+            --color-secondary: #2563eb;
+            /* 亮藍色 */
+            --color-accent: #38bdf8;
+            /* 天空藍 */
+            --color-highlight: #facc15;
+            /* 亮黃色 */
+            --color-bg: #f8fafc;
+            /* 淺灰底 */
+            --color-white: #ffffff;
+            --color-text: #334155;
+            --color-text-light: #64748b;
+
+            --spacing-container: 24px;
+            --radius-card: 16px;
+            --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        /* 基礎重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* 共用容器 */
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-container);
+        }
+
+        /* 按鈕樣式 */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            background-color: var(--color-secondary);
+            color: var(--color-white);
+            border-radius: 50px;
+            font-weight: 600;
+            transition: opacity 0.2s;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--color-secondary);
+            color: var(--color-secondary);
+        }
+
+        /* 區塊通用設定 */
+        .section-block {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            margin-bottom: 40px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background-color: var(--color-secondary);
+            border-radius: 2px;
+        }
+
+        /* HERO 區塊設計 */
+        .hero-section {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(180deg, #e0f2fe 0%, #f8fafc 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 裝飾性背景圓球 */
+        .hero-bg-decoration {
+            position: absolute;
+            top: -10%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: var(--color-accent);
+            opacity: 0.1;
+            border-radius: 50%;
+            filter: blur(50px);
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            /* 手機版置中 */
+        }
+
+        .tag-group {
+            display: flex;
+            justify-content: center;
+            /* 手機版置中 */
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .tag-badge {
+            background: var(--color-white);
+            color: var(--color-secondary);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--color-primary);
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--color-text-light);
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-image-wrapper {
+            margin-top: 40px;
+            border-radius: var(--radius-card);
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 桌機版 Hero 調整 */
+        @media (min-width: 768px) {
+            .hero-section {
+                text-align: left;
+            }
+
+            .hero-content {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 40px;
+                align-items: center;
+                text-align: left;
+            }
+
+            .tag-group {
+                justify-content: flex-start;
+            }
+
+            .hero-subtitle {
+                margin-left: 0;
+            }
+
+            .hero-image-wrapper {
+                margin-top: 0;
+            }
+
+            .hero-title {
+                font-size: 3.5rem;
+            }
+        }
+
+        /* 專案列表 (Projects) */
+        .project-card {
+            background: var(--color-white);
+            border-radius: var(--radius-card);
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            /* 手機版上下排列 */
+        }
+
+        .project-image-box {
+            width: 100%;
+            /* 強制設定長寬比，這樣縮放時方框不會忽長忽短 */
+            /* aspect-ratio: 3 / 2; */
+            background-color: #f1f5f9;
+            overflow: hidden;
+        }
+
+        .project-image-box img {
+            width: 100%;
+            height: 100%;
+            /* 如果圖片內容不重要（如背景圖），用 cover；
+       如果是截圖（如選科系統），建議用 contain */
+            object-fit: contain;
+            /* 增加一點內縮讓截圖像放在框框裡 */
+            padding: 0px;
+            /* object-position: top; */
+            /* 預防圖片太小被過度放大而模糊 */
+            image-rendering: -webkit-optimize-contrast;
+
+        }
+
+        .project-info-box {
+            padding: 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-category {
+            color: var(--color-accent);
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .project-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 12px;
+        }
+
+        .project-desc {
+            font-size: 0.95rem;
+            color: var(--color-text-light);
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        /* 桌機版專案卡片 (左右排列) */
+        @media (min-width: 768px) {
+            .project-card {
+                flex-direction: row;
+                height: 280px;
+            }
+
+            .project-image-box {
+                width: 45%;
+                height: 100%;
+            }
+
+            .project-info-box {
+                width: 55%;
+            }
+        }
+
+        /* 提案區塊 (Proposal) */
+        .proposal-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        .proposal-card {
+            background: #f0f9ff;
+            /* 淺藍底 */
+            border: 1px solid #bae6fd;
+            border-radius: var(--radius-card);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .proposal-icon-wrapper {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: var(--color-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .proposal-icon-wrapper img {
+            width: 60%;
+            height: 60%;
+            object-fit: contain;
+        }
+
+        .proposal-card h3 {
+            margin-bottom: 12px;
+            color: var(--color-primary);
+        }
+
+        @media (min-width: 768px) {
+            .proposal-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* 報價模式 (Dark Theme) */
+        .model-section {
+            background: linear-gradient(135deg, var(--color-primary) 0%, #1e293b 100%);
+            color: var(--color-white);
+            border-radius: var(--radius-card);
+            padding: 40px 24px;
+            margin-top: 40px;
+        }
+
+        .model-section .section-title {
+            color: var(--color-white);
+        }
+
+        .model-section .section-title::after {
+            background-color: var(--color-highlight);
+        }
+
+        .pricing-list {
+            display: grid;
+            gap: 20px;
+        }
+
+        .pricing-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 24px;
+            border-radius: 12px;
+            border-left: 4px solid var(--color-highlight);
+        }
+
+        .pricing-head {
+            color: var(--color-highlight);
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .pricing-desc {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+        }
+
+        @media (min-width: 768px) {
+            .pricing-list {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* 頁尾 */
+        .site-footer {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--color-text-light);
+            font-size: 0.85rem;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 40px;
+        }
+
+        /* 導覽列 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 16px 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--color-primary);
+        }
+
+        .nav-links {
+            display: none;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: var(--color-text);
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--color-secondary);
+        }
+
+        .nav-btn {
+            padding: 8px 20px;
+            background-color: var(--color-primary);
+            color: white;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: opacity 0.2s;
+        }
+
+        .nav-btn:hover {
+            opacity: 0.9;
+        }
+
+        @media (min-width: 768px) {
+            .nav-links {
+                display: flex;
+            }
+        }
+
+        /* 時間軸樣式 */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 40px auto;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e2e8f0;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -36px;
+            top: 0;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--color-secondary);
+            border: 4px solid #fff;
+            box-shadow: 0 0 0 2px var(--color-secondary);
+        }
+
+        .timeline-date {
+            font-size: 0.85rem;
+            color: var(--color-text-light);
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .timeline-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+        }
+
+        .timeline-desc {
+            font-size: 0.95rem;
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        /* 技能標籤雲 */
+        .skill-cloud {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .skill-tag {
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-text);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .skill-tag i {
+            color: var(--color-secondary);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="#" class="nav-logo">Dr. Hsieh<span style="color:var(--color-secondary);">.</span></a>
+            <div class="nav-links">
+                <a href="#about" class="nav-link">關於我</a>
+                <a href="#projects" class="nav-link">專案作品</a>
+                <a href="#competencies" class="nav-link">核心能力</a>
+                <a href="#contact" class="nav-btn">與我聯繫</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero-section">
+        <div class="hero-bg-decoration"></div>
+        <div class="container hero-content">
+            <div class="hero-text-area">
+                <div class="tag-group">
+                    <span class="tag-badge">🩺 Orthopedics</span>
+                    <span class="tag-badge">💻 Full-Stack</span>
+                    <span class="tag-badge">🤖 AI Agent</span>
+                </div>
+                <h1 class="hero-title">Bridging<br>Medicine & Tech</h1>
+                <p class="hero-subtitle">
+                    我是謝醫師，一位即將邁入骨科的住院醫師，同時也是全端開發者。<br>
+                    我致力於用程式碼解決醫療現場的真實問題，打造最懂醫師需求的數位工具。
+                </p>
+                <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+                    <a href="#projects" class="btn">查看專案成果</a>
+                    <a href="#contact" class="btn btn-outline">索取詳細履歷</a>
+                </div>
+            </div>
+
+        </div>
+    </header>
+
+    <section id="projects" class="section-block">
+        <div class="container">
+            <h2 class="section-title">過往專案經驗</h2>
+
+            <div class="projects-wrapper">
+
+                <article class="project-card">
+                    <div class="project-image-box">
+                        <img src="https://raw.githubusercontent.com/donald0124/sphsieh-site/refs/heads/main/clinic-LineOA.jpg"
+                            alt="Line OA 介面截圖">
+                    </div>
+                    <div class="project-info-box">
+                        <span class="project-category">Line OA + AI Chatbot</span>
+                        <h3 class="project-title">診所LINE官方帳號 AI智能客服</h3>
+                        <p class="project-desc">完整建置官方帳號，並整合 AI Chatbot 進行初步分流與問答。減輕櫃檯重複回答常見問題的負擔，提供病患 24/7 的即時回應。</p>
+                        <a href="https://line.me/R/ti/p/@gsj9393s" target="_blank" class="btn-outline btn"
+                            style="padding: 8px 20px; font-size: 0.9rem;">加入好友體驗</a>
+                    </div>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-image-box">
+                        <img src="https://raw.githubusercontent.com/donald0124/sphsieh-site/refs/heads/main/clinic-website.jpg"
+                            alt="官網截圖">
+                    </div>
+                    <div class="project-info-box">
+                        <span class="project-category">Web Development</span>
+                        <h3 class="project-title">診所形象官方網站</h3>
+                        <p class="project-desc">打造高速靜態網站。優化 SEO 架構，確保搜尋精準導流。整合 Google Maps 與門診資訊，並建置衛教文章專區。</p>
+                        <a href="https://drhsieh-rehab.com" target="_blank" class="btn-outline btn"
+                            style="padding: 8px 20px; font-size: 0.9rem;">瀏覽網站</a>
+                    </div>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-image-box">
+                        <img src="https://placehold.co/600x400/1877f2/ffffff?text=GenAI+Content+Marketing" alt="粉專行銷截圖">
+                    </div>
+                    <div class="project-info-box">
+                        <span class="project-category">Social Media Marketing</span>
+                        <h3 class="project-title">粉絲專頁圖文行銷</h3>
+                        <p class="project-desc">運用 ChatGPT 與 Gemini 生成正確無誤的解剖構造圖與文案，解決傳統醫療小編不懂解剖學的痛點，大幅降低成本。</p>
+                        <a href="https://www.facebook.com/Top.rehabilitation.center" target="_blank"
+                            class="btn-outline btn" style="padding: 8px 20px; font-size: 0.9rem;">查看粉專</a>
+                    </div>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-image-box">
+                        <img src="https://placehold.co/600x400/9333ea/ffffff?text=Brand+Identity+Design" alt="平面設計作品集">
+                    </div>
+                    <div class="project-info-box">
+                        <span class="project-category">Graphic Design</span>
+                        <h3 class="project-title">診所視覺識別設計</h3>
+                        <p class="project-desc">為診所打造一致性的品牌視覺系統。包含專業名片設計、物理治療卡排版以及衛教海報設計，提升診所的專業形象。</p>
+                        <a href="#" class="btn-outline btn" style="padding: 8px 20px; font-size: 0.9rem;">查看設計作品</a>
+                    </div>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-image-box">
+                        <img src="https://placehold.co/600x400/64748b/ffffff?text=MednewsDrop+Email+Demo"
+                            alt="MednewsDrop 示意圖">
+                    </div>
+                    <div class="project-info-box">
+                        <span class="project-category">AI & Automation</span>
+                        <h3 class="project-title">MednewsDrop</h3>
+                        <p class="project-desc">結合 LLM 的自動化工具。系統自動定期抓取 PubMed 上的最新醫學論文，生成精簡摘要並寄送電子報。</p>
+                        <a href="https://mednewsdrop.com" target="_blank" class="btn-outline btn"
+                            style="padding: 8px 20px; font-size: 0.9rem;">查看服務</a>
+                    </div>
+                </article>
+
+
+                <article class="project-card">
+                    <div class="project-image-box">
+                        <img src="https://placehold.co/600x400/ef4444/ffffff?text=ETF+Strategy+Chart"
+                            alt="ETF 績效比較工具截圖">
+                    </div>
+                    <div class="project-info-box">
+                        <span class="project-category">FinTech / Data Visualization</span>
+                        <h3 class="project-title">台股正2ETF 策略績效比較</h3>
+                        <p class="project-desc">視覺化呈現台股正2 ETF 策略與大盤的績效差異。使用 React 與動態圖表技術，幫助投資人進行歷史回測與數據分析。</p>
+                        <a href="https://donald0124.github.io/2xetf-strategy-compare/" target="_blank"
+                            class="btn-outline btn" style="padding: 8px 20px; font-size: 0.9rem;">試用工具</a>
+                    </div>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-image-box">
+                        <img src="https://placehold.co/600x400/1877f2/ffffff?text=FB+IG+Auto+Publish" alt="社群自動發布系統">
+                    </div>
+                    <div class="project-info-box">
+                        <span class="project-category">Automation & API</span>
+                        <h3 class="project-title">FB/IG 衛教圖文自動發布</h3>
+                        <p class="project-desc">串接 Meta Graph API，實現衛教圖文的自動化排程。從內容庫自動抓取並同步發布至 Facebook 粉專與
+                            Instagram，大幅節省社群經營的人力成本。</p>
+                    </div>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-image-box">
+                        <img src="https://placehold.co/600x400/000000/ffffff?text=Voice+AI+Agent" alt="語音筆記機器人介面">
+                    </div>
+                    <div class="project-info-box">
+                        <span class="project-category">AI Agent Workflow</span>
+                        <h3 class="project-title">語音筆記整理 & Threads 自動發文</h3>
+                        <p class="project-desc">打造個人化 AI 助理工作流。自動將語音轉錄為文字筆記，利用 LLM 提取重點整理，並自動串接 Threads API
+                            發布觀點，實現「說話即寫作」。</p>
+                    </div>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-image-box">
+                        <img src="./choice-system.gif" alt="選科系統截圖">
+                    </div>
+                    <div class="project-info-box">
+                        <span class="project-category">System Logic / React</span>
+                        <h3 class="project-title">住院醫師選科預排系統</h3>
+                        <p class="project-desc">解決複雜的人力分配與志願排序邏輯。提供直觀的拖放介面 (Drag & Drop)，模擬實際選科作業，優化分發流程。</p>
+                    </div>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-image-box">
+                        <img src="./christmas-event-page.jpg" alt="聖誕節活動頁面">
+                    </div>
+                    <div class="project-info-box">
+                        <span class="project-category">Interactive Web Design</span>
+                        <h3 class="project-title">2025 聖誕節活動互動頁</h3>
+                        <p class="project-desc">針對節慶行銷設計的 RWD 互動網頁。包含動畫效果與互動機制，提升使用者參與度與節慶氛圍。</p>
+                        <a href="https://donald0124.github.io/2025-merry-christmas/" target="_blank"
+                            class="btn-outline btn" style="padding: 8px 20px; font-size: 0.9rem;">體驗活動</a>
+                    </div>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="competencies" class="section-block" style="background-color: #ffffff;">
+        <div class="container">
+            <h2 class="section-title">核心競爭力</h2>
+            <div class="proposal-grid">
+                <div class="proposal-card">
+                    <h3>🩺 醫療與科技的橋樑</h3>
+                    <p>不僅是工程師，更是臨床醫師。我深刻理解醫療現場的痛點、法規限制與醫病關係，能開發出真正切中醫療人員需求的數位工具。</p>
+                </div>
+
+                <div class="proposal-card">
+                    <h3>⚡ 自動化工作流專家</h3>
+                    <p>擅長使用 n8n、Python 與 LLM 技術，將繁瑣的行政流程（如病歷摘要、社群發文、選科排程）自動化，釋放寶貴的臨床時間。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="section-block" style="background-color: var(--color-bg);">
+        <div class="container">
+            <h2 class="section-title">我的經歷與旅程</h2>
+            <p style="text-align: center; max-width: 600px; margin: 0 auto 40px auto; color: var(--color-text-light);">
+                從醫學系到全端開發，這是一段不斷跨越舒適圈的旅程。<br>每一個階段，都讓我更清楚如何將科技落地於醫療現場。
+            </p>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <span class="timeline-dot"></span>
+                    <span class="timeline-date">2025 - Present</span>
+                    <h3 class="timeline-title">骨科住院醫師 (Orthopedic Resident)</h3>
+                    <p class="timeline-desc">即將進入臨床訓練。目標是結合自身的開發能力，優化科內的排程系統與病患管理流程，並持續探索 AI 在影像判讀與手術導航的應用。</p>
+                </div>
+
+                <div class="timeline-item">
+                    <span class="timeline-dot"
+                        style="background: var(--color-accent); box-shadow: 0 0 0 2px var(--color-accent);"></span>
+                    <span class="timeline-date">2024 - 2025</span>
+                    <h3 class="timeline-title">Gap Year & Full-Stack Developer</h3>
+                    <p class="timeline-desc">利用 Gap Year 全心投入程式開發。獨立接案完成多個診所官網與自動化系統建置。此期間深化了 React, Node.js 與 AI Agent
+                        的實戰能力，並開發了 MednewsDrop 服務。</p>
+                </div>
+
+                <div class="timeline-item">
+                    <span class="timeline-dot" style="background: #94a3b8; box-shadow: 0 0 0 2px #94a3b8;"></span>
+                    <span class="timeline-date">2017 - 2024</span>
+                    <h3 class="timeline-title">醫學系 (Doctor of Medicine)</h3>
+                    <p class="timeline-desc">完成七年醫學教育與實習。在醫院實習期間，深刻體會到臨床行政效率的痛點，種下了日後學習程式解決問題的種子。</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 60px; text-align: center;">
+                <h3 style="font-size: 1.5rem; color: var(--color-primary); margin-bottom: 20px;">技術棧 (Tech Stack)</h3>
+                <div class="skill-cloud">
+                    <div class="skill-tag">⚛️ React / Next.js</div>
+                    <div class="skill-tag">🚀 Astro</div>
+                    <div class="skill-tag">🤖 LLM / OpenAI API</div>
+                    <div class="skill-tag">🐍 Python</div>
+                    <div class="skill-tag">⚡ n8n Automation</div>
+                    <div class="skill-tag">📱 Line Messaging API</div>
+                    <div class="skill-tag">🎨 Tailwind CSS</div>
+                    <div class="skill-tag">🔥 Firebase</div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <section id="contact" class="container" style="margin-bottom: 60px;">
+        <div class="model-section" style="text-align: center;">
+            <h2 class="section-title">與我聯繫</h2>
+            <p style="color: #cbd5e1; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto;">
+                無論是醫療資訊系統開發、自動化流程諮詢，或是單純的技術交流，都歡迎隨時與我聯繫。
+            </p>
+
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <a href="mailto:your-email@example.com" class="btn"
+                    style="background-color: var(--color-white); color: var(--color-primary);">
+                    📧 發送郵件
+                </a>
+                <a href="https://github.com/donald0124" target="_blank" class="btn btn-outline"
+                    style="border-color: var(--color-white); color: var(--color-white);">
+                    GitHub
+                </a>
+                <a href="https://www.linkedin.com/in/your-profile" target="_blank" class="btn btn-outline"
+                    style="border-color: var(--color-white); color: var(--color-white);">
+                    LinkedIn
+                </a>
+            </div>
+        </div>
+    </section>
+
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>Created by Dr. Hsieh | Orthopedic Resident & Developer</p>
+            <p style="margin-top: 5px;">© 2025 All Rights Reserved.</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>

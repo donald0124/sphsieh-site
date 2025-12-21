@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. Hsieh - Medical Tech Solutions</title>
+    <style>
+        :root {
+            /* 調整後的配色系統 */
+            --primary: #0f172a;    /* 深藍 - 用於主標題 */
+            --secondary: #2563eb;  /* 亮藍 - 用於按鈕/重點 */
+            --accent: #0ea5e9;     /* 天藍 - 用於裝飾 */
+            --highlight: #facc15;  /* 亮黃 - 用於深色背景的高亮文字 */
+            --bg: #f8fafc;
+            --text: #1e293b;       /* 加深內文顏色以提升對比 */
+            --white: #ffffff;
+            
+            --radius: 16px;        /* 圓角加大 */
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 10;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        html {
+            /* 基礎字體放大，提升閱讀性 */
+            font-size: 18px; 
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        /* 連結樣式去除底線 */
+        a { text-decoration: none; }
+
+        /* Container - Mobile First padding */
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Section Spacing */
+        section {
+            padding: 60px 0;
+        }
+
+        /* Typography */
+        h1, h2, h3 {
+            color: var(--primary);
+            font-weight: 800;
+            line-height: 1.3;
+        }
+
+        h1 {
+            font-size: 2.5rem; /* 手機版標題大小 */
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 40px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 60px;
+            height: 6px;
+            background: var(--secondary);
+            border-radius: 3px;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #475569;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            background: var(--secondary);
+            color: var(--white);
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: transform 0.2s;
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.3);
+            margin-top: 10px;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+            box-shadow: none;
+            margin-right: 10px;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(180deg, #e0f2fe 0%, #f8fafc 100%);
+            padding-top: 40px;
+        }
+
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .tag {
+            background: var(--white);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--secondary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        /* Cards & Grid */
+        .grid {
+            display: grid;
+            /* RWD: 手機單欄，大螢幕自動排版 */
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        @media (min-width: 768px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            h1 { font-size: 3.5rem; }
+            h2 { font-size: 2.2rem; }
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-tag {
+            color: var(--accent);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .card h3 {
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        /* Dark Section (Model & Pricing) */
+        .dark-section {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: var(--white);
+            border-radius: var(--radius);
+            padding: 40px 24px;
+            margin: 40px 0;
+        }
+
+        .dark-section h2 {
+            color: var(--white);
+        }
+        
+        /* 標題下方線條改為亮色 */
+        .dark-section h2::after {
+            background: var(--highlight); 
+        }
+
+        .dark-section p {
+            color: #cbd5e1; /* 淺灰字體，確保深色背景上的可讀性 */
+            font-size: 1.1rem;
+        }
+
+        .model-item {
+            background: rgba(255, 255, 255, 0.1); /* 半透明背景 */
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--highlight); /* 亮黃色左邊框強調 */
+        }
+
+        .model-title {
+            color: var(--highlight); /* 修改：高亮標題顏色 */
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #64748b;
+            font-size: 0.9rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <div class="container">
+            <div class="tag-container">
+                <span class="tag">🩺 住院醫師</span>
+                <span class="tag">💻 全端開發</span>
+                <span class="tag">🤖 AI 整合</span>
+            </div>
+            <h1>Bridging<br>Medicine & Tech</h1>
+            <p style="font-size: 1.2rem; color: #334155; margin-bottom: 30px;">
+                專為醫療場景打造的數位解決方案。<br>
+                用醫師的語言溝通，用工程師的技術解決問題。
+            </p>
+            <a href="#projects" class="btn">查看專案成果</a>
+        </div>
+    </header>
+
+    <section id="projects">
+        <div class="container">
+            <h2>過往專案經驗</h2>
+            <div class="grid">
+                
+                <div class="card">
+                    <span class="card-tag">Line OA + AI Chatbot</span>
+                    <h3>謝明福復健科診所 Line OA</h3>
+                    <p>完整建置官方帳號，並整合 AI Chatbot 進行初步分流與問答。</p>
+                    <p>解決痛點：減輕櫃檯重複回答常見問題的負擔，提供病患 24/7 的即時回應。</p>
+                    <div style="margin-top: auto;">
+                        <a href="https://line.me/R/ti/p/@gsj9393s" target="_blank" class="btn btn-outline">加入好友體驗</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <span class="card-tag">Web Development</span>
+                    <h3>復健科診所形象官網</h3>
+                    <p>針對「謝明福復健科診所」打造的高速靜態網站。優化 SEO 架構，確保搜尋精準導流。整合 Google Maps 與門診資訊，並建置<strong>衛教文章專區</strong>，建立專業形象。</p>
+                    <div style="margin-top: auto;">
+                        <a href="https://drhsieh-rehab.com" target="_blank" class="btn btn-outline">瀏覽網站</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <span class="card-tag">Social Media Marketing</span>
+                    <h3>粉絲專頁圖文行銷</h3>
+                    <p>運用 ChatGPT 與 Gemini 生成正確無誤的解剖構造圖與文案，解決傳統醫療小編不懂解剖學的痛點，大幅降低專業內容產出的時間成本。</p>
+                    <div style="margin-top: auto;">
+                        <a href="https://www.facebook.com/Top.rehabilitation.center" target="_blank" class="btn btn-outline">查看粉專</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <span class="card-tag">AI & Automation</span>
+                    <h3>MednewsDrop</h3>
+                    <p>結合 LLM 的自動化工具。系統自動定期抓取 PubMed 上的最新醫學論文，生成精簡摘要，並以美觀的電子郵件格式發送到訂閱者信箱。證明了醫療資訊自動化的可行性。</p>
+                    <div style="margin-top: auto;">
+                        <a href="https://mednewsdrop.com" target="_blank" class="btn btn-outline">查看服務</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <span class="card-tag">Interactive Tools</span>
+                    <h3>互動式網頁工具</h3>
+                    <p>1. <strong>選科預排系統</strong>：使用 React 與資料庫構建，處理複雜的順序邏輯。<br>
+                       2. <strong>聖誕節活動頁面</strong>：互動網頁設計。</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <h2>針對新診所的提案 (泌尿外科)</h2>
+            <div class="grid">
+                <div class="card" style="background: #f0f9ff; border-color: #bae6fd;">
+                    <h3>🔒 高隱私 AI 諮詢</h3>
+                    <p>泌尿科病患極重隱私。建立 Line AI 機器人，用專業且具同理心的語氣回答（如包皮槍、結紮、性功能障礙），過濾無效名單，引導精準病患預約。</p>
+                </div>
+                <div class="card" style="background: #f0f9ff; border-color: #bae6fd;">
+                    <h3>📝 輕鬆維護的官網</h3>
+                    <p>不用學複雜後台。我將網站與 Notion 筆記軟體串接，學長只需像寫筆記一樣打字，官網衛教專區自動更新。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="model">
+        <div class="container">
+            <div class="dark-section">
+                <h2>合作模式與報價架構</h2>
+                <p>透明、單純，不綁架長期合約。專為醫師設計的合作方案。</p>
+                <div style="margin-top: 30px;">
+                    
+                    <div class="model-item">
+                        <span class="model-title">💻 專案建置費 (Project Fee)</span>
+                        <p>包含網站開發、Line 選單設計、AI Prompt 撰寫與系統串接。依功能需求一次性報價，付清即擁有程式碼所有權。</p>
+                    </div>
+
+                    <div class="model-item">
+                        <span class="model-title">🤖 AI 實報實銷 (Direct Cost)</span>
+                        <p>AI 運算費用 (OpenAI API) 直接綁定診所信用卡。用多少付多少，帳務完全透明，我不經手，發票直接開給診所。</p>
+                    </div>
+
+                    <div class="model-item">
+                        <span class="model-title">🛠️ 系統維護 (Maintenance)</span>
+                        <p>提供首年系統保固。採用 Serverless 架構，無須昂貴主機費。網站內容可由診所端透過 Notion 自行更新。</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>Created by Dr. Hsieh | Orthopedic Resident & Developer</p>
+        <p style="font-size: 0.8rem; margin-top: 10px; opacity: 0.7;">© 2025 All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>
