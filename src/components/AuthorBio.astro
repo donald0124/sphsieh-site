@@ -1,0 +1,49 @@
+---
+// src/components/AuthorBio.astro
+---
+<div class="author-bio">
+  <div class="bio-avatar">
+    <img src="/favicon.svg" alt="Po Hsieh" width="60" height="60" />
+  </div>
+  <div class="bio-content">
+    <h3>Written by Po Hsieh</h3>
+    <p>
+      住院醫師 (Day) ⇄ 網頁開發者 (Night)。<br/>
+      喜歡用程式碼解決臨床問題。
+    </p>
+    <div class="bio-links">
+      <a href="/about">→ 關於我</a>
+      <a href="/projects">→ 查看專案</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .author-bio {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  .bio-avatar img {
+    border-radius: 50%;
+    background: var(--card-bg);
+  }
+  .bio-content h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+  }
+  .bio-content p {
+    margin: 0 0 0.5rem 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+  .bio-links a {
+    margin-right: 1rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--accent);
+  }
+</style>

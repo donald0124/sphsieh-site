@@ -1,171 +1,141 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import { getCollection } from "astro:content";
+// src/pages/blog/index.astro
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
 
-const posts = (await getCollection("posts")).sort(
-    (a, b) => b.data.publishedDate.valueOf() - a.data.publishedDate.valueOf(),
-);
+// 1. 取得所有文章並依日期排序
+const allPosts = (await getCollection('posts'))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// 2. 取得網址上的 tag 參數 (例如 /blog?tag=React)
+const { searchParams } = Astro.url;
+const currentTag = searchParams.get('tag');
+
+// 3. 根據 tag 篩選文章
+const posts = currentTag 
+  ? allPosts.filter(post => post.data.tags.includes(currentTag))
+  : allPosts;
+
+// 4. 收集所有唯一的 Tags (用於顯示篩選器)
+const allTags = [...new Set(allPosts.flatMap(post => post.data.tags))];
 ---
 
-<Layout title="Blog - Po Hsieh">
-    <!-- Inline Navigation used here to ensure links work from subpages, or update Main Layout to handle absolute paths -->
-    <nav
-        class="navbar"
-        style="position: relative; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.05);"
-    >
-        <div class="container nav-container">
-            <a href="/" class="nav-logo"
-                >Po Hsieh<span style="color:var(--color-secondary);">.</span></a
-            >
-            <div class="nav-links">
-                <a href="/#about" class="nav-link">關於我</a>
-                <a href="/#projects" class="nav-link">專案作品</a>
-                <a href="/blog" class="nav-link active">部落格</a>
-                <a href="/#contact" class="nav-btn">與我聯繫</a>
-            </div>
-        </div>
-    </nav>
+<Layout title="Writing">
+  <section class="blog-header">
+    <h1>Writing</h1>
+    <p class="subtitle">Thoughts on medicine, code, and everything in between.</p>
+    
+    <div class="tag-filter">
+      <a 
+        href="/blog" 
+        class={`tag-chip ${!currentTag ? 'active' : ''}`}
+      >
+        All
+      </a>
+      {allTags.map(tag => (
+        <a 
+          href={`/blog?tag=${tag}`} 
+          class={`tag-chip ${currentTag === tag ? 'active' : ''}`}
+        >
+          #{tag}
+        </a>
+      ))}
+    </div>
+  </section>
 
-    <section class="section-block" style="padding-top: 60px;">
-        <div class="container">
-            <h1 class="section-title">Blog</h1>
-            <p
-                style="text-align: center; margin-bottom: 40px; color: var(--color-text-light);"
-            >
-                Sharing thoughts on Medicine, Technology, and everything in
-                between.
-            </p>
-            <div class="posts-grid">
-                {
-                    posts.length === 0 ? (
-                        <p style="text-align: center;">
-                            No posts yet. Visit{" "}
-                            <a href="/keystatic">/keystatic</a> to create one!
-                        </p>
-                    ) : (
-                        posts.map((post) => (
-                            <article class="post-card">
-                                <a
-                                    href={`/blog/${post.slug}`}
-                                    style="text-decoration: none; color: inherit;"
-                                >
-                                    <div class="post-content">
-                                        <h2 class="post-title">
-                                            {post.data.title}
-                                        </h2>
-                                        <time
-                                            datetime={post.data.publishedDate.toISOString()}
-                                            class="post-date"
-                                        >
-                                            {post.data.publishedDate.toLocaleDateString()}
-                                        </time>
-                                        <p class="post-desc">
-                                            {post.data.description}
-                                        </p>
-                                        <span class="read-more">
-                                            Read more →
-                                        </span>
-                                    </div>
-                                </a>
-                            </article>
-                        ))
-                    )
-                }
-            </div>
-        </div>
-    </section>
+  <section class="post-list">
+    {posts.length > 0 ? (
+      <ul>
+        {posts.map((post) => (
+          <li>
+            <a href={`/blog/${post.slug}`} class="post-item">
+              <div class="post-meta">
+                <time>{post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
+                <div class="mini-tags">
+                  {post.data.tags.slice(0, 2).map(t => <span>#{t}</span>)}
+                </div>
+              </div>
+              <h2 class="post-title">{post.data.title}</h2>
+            </a>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="empty-state">No posts found with tag "#{currentTag}".</p>
+    )}
+  </section>
 </Layout>
 
 <style>
-    .posts-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 2rem;
-        max-width: 800px;
-        margin: 0 auto;
-    }
-    .post-card {
-        background: var(--color-white);
-        border-radius: var(--radius-card);
-        padding: 2rem;
-        box-shadow: var(--shadow-card);
-        transition:
-            transform 0.2s ease,
-            box-shadow 0.2s ease;
-        border: 1px solid #f1f5f9;
-        cursor: pointer;
-    }
-    .post-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    }
-    .post-title {
-        color: var(--color-primary);
-        font-size: 1.5rem;
-        margin-bottom: 0.5rem;
-        font-weight: 700;
-    }
-    .post-date {
-        font-size: 0.875rem;
-        color: var(--color-text-light);
-        display: block;
-        margin-bottom: 1rem;
-    }
-    .post-desc {
-        color: var(--color-text);
-        margin-bottom: 1.5rem;
-        line-height: 1.6;
-    }
-    .read-more {
-        color: var(--color-secondary);
-        font-weight: 600;
-        font-size: 0.9rem;
-    }
-    /* Simple nav overrides for this page */
-    .nav-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        height: 70px;
-    }
-    .nav-logo {
-        font-size: 1.5rem;
-        font-weight: 900;
-        color: var(--color-primary);
-        text-decoration: none;
-    }
-    .nav-links {
-        display: flex;
-        gap: 24px;
-        align-items: center;
-    }
-    .nav-link {
-        color: var(--color-text);
+  /* 你的 CSS 樣式 */
+  .blog-header { margin-bottom: 3rem; }
+  .tag-filter { 
+    display: flex; 
+    gap: 0.8rem; 
+    flex-wrap: wrap; 
+    margin-top: 1.5rem; 
+  }
+  
+  .tag-chip {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    background: var(--card-bg);
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    transition: all 0.2s;
+  }
+  
+  .tag-chip:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  
+  /* 選中狀態 */
+  .tag-chip.active {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
 
-        text-decoration: none;
-        font-weight: 500;
-        font-size: 0.95rem;
-        transition: color 0.3s;
-    }
-    .nav-link:hover,
-    .nav-link.active {
-        color: var(--color-secondary);
-    }
-    .nav-btn {
-        padding: 8px 20px;
-        background: var(--color-primary);
-        color: white;
-        border-radius: 20px;
-        text-decoration: none;
-        font-size: 0.9rem;
-        transition: background 0.3s;
-    }
-    .nav-btn:hover {
-        background: var(--color-highlight);
-    }
-    @media (max-width: 768px) {
-        .nav-links {
-            display: none; /* Simplification for mobile for now */
-        }
-    }
+  .post-list ul { list-style: none; padding: 0; }
+  .post-item { 
+    display: flex; 
+    align-items: baseline; 
+    padding: 1.2rem 0; 
+    border-bottom: 1px solid var(--border-color);
+    gap: 2rem;
+  }
+  
+  .post-meta {
+    min-width: 120px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  
+  .post-meta time {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  
+  .mini-tags span {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    background: var(--card-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-right: 4px;
+  }
+
+  .post-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+
+  @media (max-width: 600px) {
+    .post-item { flex-direction: column; gap: 0.5rem; }
+  }
 </style>

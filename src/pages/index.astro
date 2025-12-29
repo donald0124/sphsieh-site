@@ -1,593 +1,158 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import ThemeToggle from "../components/ThemeToggle.astro";
-import { getCollection } from "astro:content";
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
 
-// Fetch posts (we can filter for latest later)
-const posts = (await getCollection("posts"))
-    .sort(
-        (a, b) =>
-            b.data.publishedDate.valueOf() - a.data.publishedDate.valueOf(),
-    )
-    .slice(0, 3); // Top 3
+// 取得最新的 3 篇文章
+const posts = (await getCollection('posts'))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
 
-// In a real scenario, we would fetch projects from collection, but for migration
-// we might keep the hardcoded ones temporarily OR migrate them now.
-// Given the task is to "Refactor index.astro", I will keep the *content* mostly as is
-// but restructure the HTML/CSS to match the new system.
-// I will also show how to use the 'projects' collection if there were any items.
-const projects = await getCollection("projects");
+// 取得 1 個精選專案 (例如 MednewsDrop)
+const featuredProjects = (await getCollection('projects'))
+  .filter(p => p.data.title === 'MednewsDrop') // 替換成你真實的專案標題
+  .slice(0, 1);
 ---
 
-<Layout title="Po Hsieh - 醫療科技解決方案">
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="container nav-container">
-            <a href="#" class="nav-logo">
-                Po Hsieh<span style="color:var(--color-secondary);">.</span>
-            </a>
+<Layout title="Home">
+	<section class="hero-section">
+		<h1>Bridging Medicine & Code.</h1>
+		<p class="subtitle">
+			我是 Po Hsieh (謝士博)。<br>
+			白天是住院醫師，晚上是開發者。<br>
+			致力於透過自動化與數位工具，解決臨床資訊的效率問題。
+		</p>
+	</section>
 
-            <div class="nav-links">
-                <a href="#about" class="nav-link">關於我</a>
-                <a href="#projects" class="nav-link">精選專案</a>
-                <a href="/blog" class="nav-link">部落格</a>
-                <a href="#contact" class="nav-btn">與我聯繫</a>
-                <div style="margin-left: 1rem;">
-                    <ThemeToggle />
-                </div>
-            </div>
-
-            <!-- Mobile Toggle placeholder (functionality to be added if asked, for now basic) -->
-            <div class="mobile-menu-btn" style="display:none;">Menu</div>
-        </div>
-    </nav>
-
-    <header class="hero-section">
-        <div class="hero-bg-decoration"></div>
-        <div class="container hero-content">
-            <div class="hero-text-area">
-                <div class="tag-group">
-                    <span class="tag-badge">🩺 醫官 / 醫師</span>
-                    <span class="tag-badge">💻 全端開發者</span>
-                    <span class="tag-badge">🤖 AI Agent</span>
-                </div>
-                <h1 class="hero-title">Po Hsieh 謝士博</h1>
-                <p class="hero-subtitle">
-                    連結醫療與科技的橋樑。<br />
-                    住院醫師 / 醫官 / 全端開發者。
-                </p>
-                <div class="hero-actions">
-                    <a href="#projects" class="btn">查看專案成果</a>
-                    <a href="#contact" class="btn btn-outline">索取詳細履歷</a>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <section id="projects" class="section-block">
-        <div class="container">
-            <h2 class="section-title">過往專案經驗</h2>
-
-            <div class="projects-grid">
-                <!-- Hardcoded migration content to ensure site looks same/better immediately -->
-                <!-- Ideally these move to the CMS later -->
-
-                <article class="project-card">
-                    <div class="project-image-box">
-                        <img
-                            src="/clinic-LineOA.jpg"
-                            alt="Line OA"
-                            loading="lazy"
-                        />
-                    </div>
-                    <div class="project-info-box">
-                        <span class="project-category">Line OA + AI</span>
-                        <h3 class="project-title">
-                            診所 LINE 官方帳號 AI 客服
-                        </h3>
-                        <p class="project-desc">
-                            完整建置官方帳號，並整合 AI Chatbot
-                            進行初步分流與問答。 提供病患 24/7
-                            的即時回應，減輕櫃檯行政負擔。
-                        </p>
-                        <a
-                            href="https://line.me/R/ti/p/@gsj9393s"
-                            target="_blank"
-                            class="btn-outline"
-                            style="align-self: flex-start; padding: 6px 16px; border-radius: 99px; font-size: 0.85rem;"
-                            >加入好友體驗</a
-                        >
-                    </div>
-                </article>
-
-                <article class="project-card">
-                    <div class="project-image-box">
-                        <img
-                            src="/clinic-website.jpg"
-                            alt="Clinic Website"
-                            loading="lazy"
-                        />
-                    </div>
-                    <div class="project-info-box">
-                        <span class="project-category">Web Dev</span>
-                        <h3 class="project-title">診所形象官方網站</h3>
-                        <p class="project-desc">
-                            打造高速靜態網站 (Astro)。優化 SEO
-                            架構，確保搜尋精準導流。 整合 Google Maps
-                            與門診資訊，並建置衛教文章專區。
-                        </p>
-                        <a
-                            href="https://drhsieh-rehab.com"
-                            target="_blank"
-                            class="btn-outline"
-                            style="align-self: flex-start; padding: 6px 16px; border-radius: 99px; font-size: 0.85rem;"
-                            >瀏覽網站</a
-                        >
-                    </div>
-                </article>
-
-                <article class="project-card">
-                    <div class="project-image-box">
-                        <div
-                            style="width:100%; height:100%; background: #eee; display:flex; align-items:center; justify-content:center; color:#999;"
-                        >
-                            MednewsDrop
+	<section class="section-group">
+		<div class="section-title">
+			Recent Writings
+			<a href="/blog" class="view-all">View All →</a>
+		</div>
+		<ul class="post-list">
+			{posts.map((post) => (
+				<li>
+					<a href={`/blog/${post.slug}`} class="post-link">
+						<span class="post-date">
+							{post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+						</span>
+						<span class="post-title">{post.data.title}</span>
+                        <div class="tag-group">
+                            {post.data.tags.slice(0, 2).map((tag) => (
+                                <span class="post-badge">{tag}</span>
+                            ))}
                         </div>
-                    </div>
-                    <div class="project-info-box">
-                        <span class="project-category">AI & Automation</span>
-                        <h3 class="project-title">MednewsDrop</h3>
-                        <p class="project-desc">
-                            結合 LLM 的自動化工具。系統自動定期抓取 PubMed
-                            上的最新醫學論文，生成精簡摘要並寄送電子報，幫助醫師掌握最新實證醫學。
-                        </p>
-                        <a
-                            href="https://mednewsdrop.com"
-                            target="_blank"
-                            class="btn-outline"
-                            style="align-self: flex-start; padding: 6px 16px; border-radius: 99px; font-size: 0.85rem;"
-                            >查看服務</a
-                        >
-                    </div>
-                </article>
+					</a>
+				</li>
+			))}
+		</ul>
+	</section>
 
-                <article class="project-card">
-                    <div class="project-image-box">
-                        <img
-                            src="/choice-system.gif"
-                            alt="Selection System"
-                            loading="lazy"
-                        />
-                    </div>
-                    <div class="project-info-box">
-                        <span class="project-category"
-                            >System Logic / React</span
-                        >
-                        <h3 class="project-title">住院醫師選科預排系統</h3>
-                        <p class="project-desc">
-                            解決複雜的人力分配與志願排序邏輯。提供直觀的拖放介面
-                            (Drag & Drop)，模擬實際選科作業，優化分發流程。
-                        </p>
-                    </div>
-                </article>
-
-                <!-- Dynamic Projects from CMS would go here -->
-                {
-                    projects.map((p) => (
-                        <article class="project-card">
-                            <div class="project-image-box">
-                                {p.data.image ? (
-                                    <img
-                                        src={p.data.image}
-                                        alt={p.data.title}
-                                    />
-                                ) : (
-                                    <div style="padding:20px;">No Image</div>
-                                )}
-                            </div>
-                            <div class="project-info-box">
-                                <span class="project-category">
-                                    {p.data.category}
-                                </span>
-                                <h3 class="project-title">{p.data.title}</h3>
-                                <p class="project-desc">{p.data.description}</p>
-                                {p.data.demoLink && (
-                                    <a
-                                        href={p.data.demoLink}
-                                        target="_blank"
-                                        class="btn-outline"
-                                        style="align-self: flex-start; padding: 6px 16px; border-radius: 99px; font-size: 0.85rem;"
-                                    >
-                                        Demo
-                                    </a>
-                                )}
-                            </div>
-                        </article>
-                    ))
-                }
-            </div>
-        </div>
-    </section>
-
-    <!-- Latest Writing Section -->
-    <section
-        class="section-block"
-        style="background-color: var(--color-bg-card);"
-    >
-        <div class="container">
-            <h2 class="section-title">最新文章</h2>
-            <div class="posts-grid-home">
-                {
-                    posts.map((post) => (
-                        <a href={`/blog/${post.slug}`} class="home-post-card">
-                            <span
-                                class="post-cat-tag"
-                                data-cat={post.data.category}
-                            >
-                                {post.data.category}
-                            </span>
-                            <h3>{post.data.title}</h3>
-                            <time>
-                                {post.data.publishedDate.toLocaleDateString()}
-                            </time>
-                        </a>
-                    ))
-                }
-                {
-                    posts.length === 0 && (
-                        <p style="text-align:center;color:var(--color-text-light);">
-                            目前尚無文章。
-                        </p>
-                    )
-                }
-            </div>
-            <div style="text-align: center; margin-top: 30px;">
-                <a href="/blog" class="btn-outline" style="border-radius: 99px;"
-                    >查看所有文章</a
-                >
-            </div>
-        </div>
-    </section>
-
-    <section id="competencies" class="section-block">
-        <div class="container">
-            <h2 class="section-title">核心競爭力</h2>
-            <div class="proposal-grid">
-                <div class="proposal-card">
-                    <h3>🩺 醫療與科技的橋樑</h3>
-                    <p>
-                        不僅是工程師，更是臨床醫師。我深刻理解醫療現場的痛點、法規限制與醫病關係，能開發出真正切中醫療人員需求的數位工具。
-                    </p>
+	{featuredProjects.length > 0 && (
+        <section class="section-group">
+            <div class="section-title">Featured Project</div>
+            {featuredProjects.map(project => (
+                <div class="project-card">
+                    <h3>{project.data.title}</h3>
+                    <p class="project-tech">{project.data.techStack.join(' · ')}</p>
+                    <p>自動化醫學資訊訂閱系統，讓忙碌的臨床醫師不再遺漏重要期刊更新。</p>
+                    <a href={`/projects/${project.slug}`}>Read Case Study →</a>
                 </div>
+            ))}
+        </section>
+    )}
 
-                <div class="proposal-card">
-                    <h3>⚡ 自動化工作流專家</h3>
-                    <p>
-                        擅長使用 n8n、Python 與 LLM
-                        技術，將繁瑣的行政流程（如病歷摘要、社群發文、選科排程）自動化，釋放寶貴的臨床時間。
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="contact" class="container" style="margin-bottom: 60px;">
-        <div class="model-section">
-            <h2 class="section-title" style="color:white;">與我聯繫</h2>
-            <p
-                style="text-align: center; max-width: 600px; margin: 0 auto 30px auto; color: #e2e8f0;"
-            >
-                無論是醫療資訊系統開發、自動化流程諮詢，或是單純的技術交流，都歡迎隨時與我聯繫。
-            </p>
-
-            <div
-                style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;"
-            >
-                <a
-                    href="mailto:donald0124@gmail.com"
-                    class="btn"
-                    style="background-color: white; color: var(--color-primary);"
-                >
-                    donald0124@gmail.com
-                </a>
-                <a
-                    href="https://github.com/donald0124"
-                    target="_blank"
-                    class="btn-outline"
-                    style="border-color: white; color: white;"
-                >
-                    GitHub
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <footer class="site-footer">
-        <div class="container">
-            <p>© 2025 Po Hsieh | 醫師 & 開發者</p>
-        </div>
-    </footer>
 </Layout>
 
 <style>
-    /* 
-       Most styles are now in global.css to support theming 
-       Page specific styles here 
-    */
+	.hero-section {
+		padding: 4rem 0 6rem 0;
+	}
+	h1 {
+		font-size: 2.5rem;
+		font-weight: 800;
+		margin-bottom: 1rem;
+		letter-spacing: -1px;
+	}
+	.subtitle {
+		font-size: 1.1rem;
+		color: var(--text-muted);
+		line-height: 1.8;
+	}
 
-    /* HERO */
-    .hero-section {
-        min-height: 85vh;
-        display: flex;
-        align-items: center;
-        /* Background is handled by global --color-bg */
-        position: relative;
-        overflow: hidden;
-    }
+	.section-group {
+		margin-bottom: 4rem;
+	}
+	.view-all {
+		font-size: 0.9rem;
+		font-weight: normal;
+		color: var(--text-muted);
+	}
 
-    .hero-bg-decoration {
-        position: absolute;
-        top: -10%;
-        right: -10%;
-        width: 400px;
-        height: 400px;
-        background: radial-gradient(
-            circle,
-            var(--color-accent) 0%,
-            transparent 70%
-        );
-        opacity: 0.15;
-        border-radius: 50%;
-        filter: blur(60px);
-        z-index: 0;
+	/* Post List Styling (Minimalist) */
+	.post-list {
+		list-style: none;
+		padding: 0;
+	}
+	.post-list li {
+		border-bottom: 1px solid var(--border-color);
+	}
+	.post-link {
+		display: flex;
+		align-items: baseline;
+		padding: 1rem 0;
+		gap: 2rem;
+	}
+    .post-link:hover .post-title {
+        color: var(--accent);
     }
-
-    .hero-content {
-        position: relative;
-        z-index: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        height: 100%;
-    }
-
-    .hero-text-area {
-        max-width: 800px;
-    }
+	.post-date {
+		font-family: var(--font-mono);
+		font-size: 0.85rem;
+		color: var(--text-muted);
+		min-width: 100px;
+	}
+	.post-title {
+		font-weight: 500;
+        flex-grow: 1;
+	}
 
     .tag-group {
-        display: flex;
-        gap: 12px;
-        flex-wrap: wrap;
-        margin-bottom: 24px;
+    display: flex;
+    gap: 0.5rem;
     }
 
-    .tag-badge {
-        background: var(--color-bg-card);
-        color: var(--color-secondary);
-        border: 1px solid var(--color-border);
-        padding: 6px 16px;
-        border-radius: 99px;
-        font-size: 0.85rem;
-        font-weight: 700;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    }
-
-    .hero-title {
-        font-size: 3rem;
-        font-weight: 900;
-        margin-bottom: 24px;
-        letter-spacing: -0.05em;
-    }
-
-    .hero-subtitle {
-        font-size: 1.25rem;
-        color: var(--color-text-light);
-        margin-bottom: 40px;
-        max-width: 600px;
-    }
-
-    .hero-actions {
-        display: flex;
-        gap: 16px;
-        flex-wrap: wrap;
-    }
-
-    /* Navbar additions */
-    .navbar {
-        position: fixed;
-        width: 100%;
-        z-index: 1000;
-        top: 0;
-        background: rgba(255, 255, 255, 0.1); /* Glass effect base */
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border-bottom: 1px solid var(--color-border);
-        padding: 1rem 0;
-    }
-    :global([data-theme="dark"]) .navbar {
-        background: rgba(13, 17, 23, 0.7);
-    }
-
-    .nav-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .nav-logo {
-        font-weight: 800;
-        font-size: 1.25rem;
-        color: var(--color-primary);
-    }
-    .nav-links {
-        display: none; /* Mobile hidden by default */
-        align-items: center;
-        gap: 2rem;
-    }
-    @media (min-width: 768px) {
-        .nav-links {
-            display: flex;
-        }
-    }
-    .nav-link {
-        font-weight: 500;
-        font-size: 0.95rem;
-        opacity: 0.8;
-    }
-    .nav-link:hover {
-        opacity: 1;
-        color: var(--color-secondary);
-    }
-
-    /* PROJECTS GRID */
-    .projects-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-    @media (min-width: 768px) {
-        .projects-grid {
-            grid-template-columns: 1fr 1fr;
-        }
-    }
-
-    .project-card {
-        background: var(--color-bg-card);
-        border-radius: var(--radius-card); /* defined in root? Use fallback */
-        border-radius: 16px;
-        overflow: hidden;
-        box-shadow: var(--shadow-card);
-        display: flex;
-        flex-direction: column;
-        border: 1px solid var(--color-border);
-        transition:
-            transform 0.2s,
-            box-shadow 0.2s;
-    }
-    .project-card:hover {
-        transform: translateY(-4px);
-        box-shadow: var(--shadow-hover);
-    }
-
-    .project-image-box {
-        width: 100%;
-        height: 200px;
-        background: #f1f5f9;
-        overflow: hidden;
-    }
-    .project-image-box img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .project-info-box {
-        padding: 24px;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .project-category {
-        color: var(--color-secondary);
-        font-size: 0.75rem;
-        font-weight: 800;
-        text-transform: uppercase;
-        margin-bottom: 12px;
-        letter-spacing: 0.05em;
-    }
-
-    .project-title {
-        font-size: 1.25rem;
-        margin-bottom: 12px;
-        color: var(--color-primary);
-    }
-
-    .project-desc {
-        color: var(--color-text-light);
-        font-size: 0.95rem;
-        margin-bottom: 20px;
-        flex-grow: 1;
-    }
-
-    /* HOME POSTS */
-    .posts-grid-home {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 1.5rem;
-        margin-top: 20px;
-    }
-    .home-post-card {
-        background: var(--color-bg); /* Contrast against section bg-card */
-        padding: 1.5rem;
-        border-radius: 12px;
-        border: 1px solid var(--color-border);
-        display: block;
-        transition: all 0.2s;
-    }
-    .home-post-card:hover {
-        border-color: var(--color-secondary);
-        transform: translateY(-2px);
-    }
-    .post-cat-tag {
-        font-size: 0.75rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        margin-bottom: 0.5rem;
-        display: inline-block;
+    .post-badge {
+        font-size: 0.7rem;
         padding: 2px 8px;
-        border-radius: 4px;
-        background: #e2e8f0;
-        color: #475569;
+        border-radius: 12px;
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        color: var(--text-muted);
+        font-weight: 500;
     }
-    .home-post-card h3 {
-        font-size: 1.1rem;
-        margin-bottom: 0.5rem;
-    }
-    .home-post-card time {
-        font-size: 0.85rem;
-        color: var(--color-text-light);
-    }
+    .post-badge.medical { background: #ebf8ff; color: #2b6cb0; }
+    .post-badge.tech { background: #f0fff4; color: #276749; }
+    
+    /* Dark mode adjustments via global classes if needed, 
+       but simplified via CSS variables */
+    :global(.dark) .post-badge.medical { background: #1a365d; color: #90cdf4; }
+    :global(.dark) .post-badge.tech { background: #1c4532; color: #9ae6b4; }
 
-    /* PROPOSALS */
-    .proposal-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-    @media (min-width: 768px) {
-        .proposal-grid {
-            grid-template-columns: 1fr 1fr;
-        }
-    }
-    .proposal-card {
-        background: var(--color-bg-card);
+    /* Project Card */
+    .project-card {
+        background: var(--card-bg);
         padding: 2rem;
-        border-radius: 16px;
-        border: 1px solid var(--color-border);
-        text-align: center;
+        border-radius: 12px;
     }
-    .proposal-card h3 {
+    .project-tech {
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        color: var(--text-muted);
         margin-bottom: 1rem;
-        font-size: 1.25rem;
     }
-    .proposal-card p {
-        color: var(--color-text-light);
-    }
-
-    /* MODEL SECTION */
-    .model-section {
-        background: linear-gradient(135deg, var(--color-primary) 0%, #000 100%);
-        padding: 4rem 2rem;
-        border-radius: 20px;
-        color: white;
-    }
-
-    .site-footer {
-        padding: 40px 0;
-        text-align: center;
-        color: var(--color-text-light);
-        border-top: 1px solid var(--color-border);
-        font-size: 0.9rem;
+    
+    /* RWD */
+    @media (max-width: 600px) {
+        .post-link { flex-direction: column; gap: 0.5rem; }
     }
 </style>
